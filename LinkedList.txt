@@ -1,0 +1,84 @@
+1. Print Linked List (Linked List)
+
+    Explanation: Given the head of a singly linked list, traverse the list and return an array containing the values of all the nodes in order from head to tail.
+
+    Input: head = [1, 2, 3, 4]
+
+    Output: [1, 2, 3, 4]
+
+    Clarifying Questions For Interviewer:
+    1. What should be returned if the linked list is empty (head is None)?
+    2. Are the node values guaranteed to be integers, or can they contain other types?
+    3. Can the linked list contain cycles, or is it guaranteed to be a straight singly linked list?
+    4. Is it acceptable to use an iterative loop, or is a recursive solution preferred?
+    5. Do we need to preserve the structural integrity of the original linked list?
+
+    -----
+
+    BRUTE-FORCE (RECURSIVE WITH CONCATENATION)
+
+    Idea: Use recursion to travel to the end of the list, combining the current node's value with the array results of the rest of the list via array concatenation.
+
+    Steps:
+    1. Check if the current node is null; if so, return an empty array.
+    2. Recursively call the function for the next node to get its array of values.
+    3. Concatenate the current node's value as a single-element array with the recursive result and return it.
+
+    Python Code:
+
+    class ListNode:
+        def __init__(self, val=0, next=None):
+            self.val = val
+            self.next = next
+
+    class Solution:
+        def listToArray(self, head: ListNode) -> list[int]:
+            if not head:
+                return []
+            return [head.val] + self.listToArray(head.next)
+
+    Time Complexity: O(n^2)
+    Space Complexity: O(n)
+
+    Why It Won't Work Efficiently?
+    Because:
+    - Array concatenation creates a completely new array at every single node, causing quadratic time complexity.
+    - It relies on the system call stack, making it highly vulnerable to stack overflow crashes on long lists.
+    - It forces multiple allocations and copies instead of filling a single output destination linearly.
+
+    -----
+
+    OPTIMAL (ITERATIVE TRAVERSAL)
+
+    Idea:
+    Traverse the list iteratively using a single loop, appending each node's value directly to a dynamic array until the end of the list is reached.
+
+    Steps:
+    1. Initialize an empty array to store the node values.
+    2. Set a pointer to track the current node, starting at the head.
+    3. While the current pointer is not null, append its value to the array and advance the pointer to the next node.
+
+    Python Code:
+
+    class ListNode:
+        def __init__(self, val=0, next=None):
+            self.val = val
+            self.next = next
+
+    class Solution:
+        def listToArray(self, head: ListNode) -> list[int]:
+            result = []
+            current = head
+            while current:
+                result.append(current.val)
+                current = current.next
+            return result
+
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+
+    Why It Works?
+    Because:
+    - It processes every node in the linked list exactly once, ensuring strict linear execution runtime.
+    - Appending to a dynamic array runs in amortized constant time, preventing unnecessary data copying.
+    - It avoids stack overflow constraints completely by managing state using a single local traversal pointer.
