@@ -1,84 +1,694 @@
-1. Print Linked List (Linked List)
+1. Print Linked List (Linked List Traversal)
 
-    Explanation: Given the head of a singly linked list, traverse the list and return an array containing the values of all the nodes in order from head to tail.
+    Explanation: Clear beginner-friendly explanation of the problem.
+
+    Given the head of a singly linked list, traverse the list from the first node to the last node and collect all node values into an array. Return the array containing the values in the same order as they appear in the linked list.
 
     Input: head = [1, 2, 3, 4]
 
     Output: [1, 2, 3, 4]
 
     Clarifying Questions For Interviewer:
-    1. What should be returned if the linked list is empty (head is None)?
-    2. Are the node values guaranteed to be integers, or can they contain other types?
-    3. Can the linked list contain cycles, or is it guaranteed to be a straight singly linked list?
-    4. Is it acceptable to use an iterative loop, or is a recursive solution preferred?
-    5. Do we need to preserve the structural integrity of the original linked list?
+    1. Can the linked list be empty?
+    2. Are node values always integers?
+    3. Can there be duplicate values in the linked list?
+    4. Should the values be returned in the same order as the list?
+    5. Is modifying the linked list allowed?
 
     -----
 
-    BRUTE-FORCE (RECURSIVE WITH CONCATENATION)
+    BRUTE-FORCE
 
-    Idea: Use recursion to travel to the end of the list, combining the current node's value with the array results of the rest of the list via array concatenation.
+    Idea: Brief intuition of brute-force approach.
+
+    Traverse the linked list node by node and store each value in an array.
 
     Steps:
-    1. Check if the current node is null; if so, return an empty array.
-    2. Recursively call the function for the next node to get its array of values.
-    3. Concatenate the current node's value as a single-element array with the recursive result and return it.
+    1. Create an empty result array.
+    2. Traverse the linked list from head to tail.
+    3. Append each node value to the result array and return it.
 
     Python Code:
 
-    class ListNode:
-        def __init__(self, val=0, next=None):
-            self.val = val
-            self.next = next
-
     class Solution:
-        def listToArray(self, head: ListNode) -> list[int]:
-            if not head:
-                return []
-            return [head.val] + self.listToArray(head.next)
+        def printLinkedList(self, head):
 
-    Time Complexity: O(n^2)
+            result = []
+            current = head
+
+            while current:
+                result.append(current.val)
+                current = current.next
+
+            return result
+
+    Time Complexity: O(n)
     Space Complexity: O(n)
 
     Why It Won't Work Efficiently?
     Because:
-    - Array concatenation creates a completely new array at every single node, causing quadratic time complexity.
-    - It relies on the system call stack, making it highly vulnerable to stack overflow crashes on long lists.
-    - It forces multiple allocations and copies instead of filling a single output destination linearly.
+    - Requires visiting every node.
+    - Requires extra space to store the output array.
+    - Cannot do better than O(n) since every value must be read.
 
     -----
 
-    OPTIMAL (ITERATIVE TRAVERSAL)
+    OPTIMAL
 
     Idea:
-    Traverse the list iteratively using a single loop, appending each node's value directly to a dynamic array until the end of the list is reached.
+
+    Since every node must be visited exactly once to collect its value, a single traversal is already the most efficient approach possible.
 
     Steps:
-    1. Initialize an empty array to store the node values.
-    2. Set a pointer to track the current node, starting at the head.
-    3. While the current pointer is not null, append its value to the array and advance the pointer to the next node.
+    1. Initialize an empty array.
+    2. Traverse the linked list once.
+    3. Store each value and return the array.
 
     Python Code:
 
-    class ListNode:
-        def __init__(self, val=0, next=None):
-            self.val = val
-            self.next = next
-
     class Solution:
-        def listToArray(self, head: ListNode) -> list[int]:
+        def printLinkedList(self, head):
+
             result = []
             current = head
+
             while current:
                 result.append(current.val)
                 current = current.next
+
             return result
+
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+
+    Why It Works?
+    Because:
+    - Visits each node exactly once.
+    - Preserves the original order of values.
+    - Produces the required output array with minimal traversal.
+
+2. Linked List End Insertion (Linked List Traversal)
+
+    Explanation: Clear beginner-friendly explanation of the problem.
+
+    You are given the head of a singly linked list and a value. Insert a new node containing the given value at the end of the linked list and return the head of the updated list.
+
+    Input: head = [1, 2, 3], val = 4
+
+    Output: [1, 2, 3, 4]
+
+    Clarifying Questions For Interviewer:
+    1. Can the linked list be empty?
+    2. What should be returned if the list is empty?
+    3. Are node values always integers?
+    4. Can duplicate values exist in the list?
+    5. Should the original list structure be preserved apart from the insertion?
+
+    -----
+
+    BRUTE-FORCE
+
+    Idea: Brief intuition of brute-force approach.
+
+    Copy all values into an array, append the new value, and rebuild the linked list from scratch.
+
+    Steps:
+    1. Traverse the linked list and store values in an array.
+    2. Append the new value to the array.
+    3. Create a new linked list using the updated array.
+
+    Python Code:
+
+    class Solution:
+        def insertAtEnd(self, head, val):
+
+            values = []
+            current = head
+
+            while current:
+                values.append(current.val)
+                current = current.next
+
+            values.append(val)
+
+            dummy = ListNode(0)
+            tail = dummy
+
+            for num in values:
+                tail.next = ListNode(num)
+                tail = tail.next
+
+            return dummy.next
+
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+
+    Why It Won't Work Efficiently?
+    Because:
+    - Creates a completely new linked list.
+    - Uses extra array storage.
+    - Performs unnecessary copying of existing nodes.
+
+    -----
+
+    OPTIMAL
+
+    Idea:
+
+    Create a new node and traverse to the last node of the linked list. Connect the last node to the new node.
+
+    Steps:
+    1. Create a new node with the given value.
+    2. If the list is empty, return the new node.
+    3. Traverse to the last node and attach the new node.
+
+    Python Code:
+
+    class Solution:
+        def insertAtEnd(self, head, val):
+
+            new_node = ListNode(val)
+
+            if not head:
+                return new_node
+
+            current = head
+
+            while current.next:
+                current = current.next
+
+            current.next = new_node
+
+            return head
 
     Time Complexity: O(n)
     Space Complexity: O(1)
 
     Why It Works?
     Because:
-    - It processes every node in the linked list exactly once, ensuring strict linear execution runtime.
-    - Appending to a dynamic array runs in amortized constant time, preventing unnecessary data copying.
-    - It avoids stack overflow constraints completely by managing state using a single local traversal pointer.
+    - Traverses the list only once.
+    - Modifies the existing list directly.
+    - Uses constant extra memory.
+
+3. Length of Linked List (Linked List Traversal)
+
+    Explanation: Clear beginner-friendly explanation of the problem.
+
+    You are given the head of a singly linked list. Return the total number of nodes present in the linked list.
+
+    Input: head = [1, 2, 3, 4, 5]
+
+    Output: 5
+
+    Clarifying Questions For Interviewer:
+    1. Can the linked list be empty?
+    2. Are node values relevant for calculating the length?
+    3. Can the linked list contain duplicate values?
+    4. Is the linked list guaranteed to be singly linked?
+    5. Should we modify the linked list during the process?
+
+    -----
+
+    BRUTE-FORCE
+
+    Idea: Brief intuition of brute-force approach.
+
+    Store all node values in an array and return the size of the array.
+
+    Steps:
+    1. Create an empty array.
+    2. Traverse the linked list and store every node value.
+    3. Return the length of the array.
+
+    Python Code:
+
+    class Solution:
+        def lengthOfLinkedList(self, head):
+
+            values = []
+            current = head
+
+            while current:
+                values.append(current.val)
+                current = current.next
+
+            return len(values)
+
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+
+    Why It Won't Work Efficiently?
+    Because:
+    - Uses extra memory to store node values.
+    - Values are not needed to calculate length.
+    - Performs unnecessary storage operations.
+
+    -----
+
+    OPTIMAL
+
+    Idea:
+
+    Traverse the linked list once and keep a counter. Increment the counter for every node visited.
+
+    Steps:
+    1. Initialize a counter to 0.
+    2. Traverse the linked list node by node.
+    3. Increment the counter and return it after traversal.
+
+    Python Code:
+
+    class Solution:
+        def lengthOfLinkedList(self, head):
+
+            count = 0
+            current = head
+
+            while current:
+                count += 1
+                current = current.next
+
+            return count
+
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+
+    Why It Works?
+    Because:
+    - Visits each node exactly once.
+    - Uses only a single counter variable.
+    - Does not require any extra data structure.
+
+4. Check If Circular Linked List (Fast & Slow Pointers)
+
+    Explanation: Clear beginner-friendly explanation of the problem.
+
+    You are given the head of a singly linked list. Determine whether the linked list is circular (contains a cycle). Return True if a cycle exists; otherwise return False.
+
+    Input: head = [1, 2, 3, 4]
+           4 -> points back to node 2
+
+    Output: True
+
+    Clarifying Questions For Interviewer:
+    1. Can the linked list be empty?
+    2. Can a single node point to itself?
+    3. Should the function return a boolean value?
+    4. Is modifying the linked list allowed?
+    5. Is extra memory usage a concern?
+
+    -----
+
+    BRUTE-FORCE
+
+    Idea: Brief intuition of brute-force approach.
+
+    Keep track of all visited nodes. If a node is visited again, a cycle exists.
+
+    Steps:
+    1. Create a set to store visited nodes.
+    2. Traverse the linked list.
+    3. If a node is already in the set, return True; otherwise add it and continue.
+
+    Python Code:
+
+    class Solution:
+        def isCircular(self, head):
+
+            visited = set()
+            current = head
+
+            while current:
+
+                if current in visited:
+                    return True
+
+                visited.add(current)
+                current = current.next
+
+            return False
+
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+
+    Why It Won't Work Efficiently?
+    Because:
+    - Requires extra memory for the set.
+    - Every node must be stored.
+    - Memory usage grows with the size of the list.
+
+    -----
+
+    OPTIMAL
+
+    Idea:
+
+    Use two pointers. Move the slow pointer one step at a time and the fast pointer two steps at a time. If there is a cycle, they will eventually meet.
+
+    Steps:
+    1. Initialize slow and fast pointers at the head.
+    2. Move slow by one step and fast by two steps.
+    3. If they meet, return True; if fast reaches the end, return False.
+
+    Python Code:
+
+    class Solution:
+        def isCircular(self, head):
+
+            slow = head
+            fast = head
+
+            while fast and fast.next:
+
+                slow = slow.next
+                fast = fast.next.next
+
+                if slow == fast:
+                    return True
+
+            return False
+
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+
+    Why It Works?
+    Because:
+    - Fast pointer moves quicker than slow pointer.
+    - In a cycle, both pointers must eventually meet.
+    - Uses constant extra memory.
+
+5. Identical Linked Lists (Linked List Traversal)
+
+    Explanation: Clear beginner-friendly explanation of the problem.
+
+    You are given the heads of two singly linked lists. Check whether both linked lists are identical. Two linked lists are identical if they contain the same values in the same order and have the same length.
+
+    Input: head1 = [1, 2, 3, 4]
+           head2 = [1, 2, 3, 4]
+
+    Output: True
+
+    Clarifying Questions For Interviewer:
+    1. Can either of the linked lists be empty?
+    2. Should the function return a boolean value?
+    3. Are duplicate values allowed in the linked lists?
+    4. Do we compare node values only or node references as well?
+    5. Is modifying either linked list allowed?
+
+    -----
+
+    BRUTE-FORCE
+
+    Idea: Brief intuition of brute-force approach.
+
+    Store the values of both linked lists in separate arrays and compare the arrays.
+
+    Steps:
+    1. Traverse the first linked list and store its values.
+    2. Traverse the second linked list and store its values.
+    3. Compare both arrays and return the result.
+
+    Python Code:
+
+    class Solution:
+        def areIdentical(self, head1, head2):
+
+            arr1 = []
+            arr2 = []
+
+            current = head1
+            while current:
+                arr1.append(current.val)
+                current = current.next
+
+            current = head2
+            while current:
+                arr2.append(current.val)
+                current = current.next
+
+            return arr1 == arr2
+
+    Time Complexity: O(n + m)
+    Space Complexity: O(n + m)
+
+    Why It Won't Work Efficiently?
+    Because:
+    - Requires extra arrays to store values.
+    - Uses additional memory proportional to list sizes.
+    - Values are copied unnecessarily.
+
+    -----
+
+    OPTIMAL
+
+    Idea:
+
+    Traverse both linked lists simultaneously. If any pair of values differs, return False. At the end, both lists must also finish at the same time.
+
+    Steps:
+    1. Initialize two pointers for both linked lists.
+    2. Compare values while traversing both lists together.
+    3. Return True only if both lists end together.
+
+    Python Code:
+
+    class Solution:
+        def areIdentical(self, head1, head2):
+
+            p1 = head1
+            p2 = head2
+
+            while p1 and p2:
+
+                if p1.val != p2.val:
+                    return False
+
+                p1 = p1.next
+                p2 = p2.next
+
+            return p1 is None and p2 is None
+
+    Time Complexity: O(min(n, m))
+    Space Complexity: O(1)
+
+    Why It Works?
+    Because:
+    - Compares corresponding nodes directly.
+    - Detects value mismatches immediately.
+    - Ensures both linked lists have the same length.
+
+6. Insert in a Sorted List (Linked List Traversal)
+
+    Explanation: Clear beginner-friendly explanation of the problem.
+
+    You are given the head of a sorted singly linked list and a value. Insert the value into its correct position so that the linked list remains sorted. Return the head of the updated linked list.
+
+    Input: head = [1, 3, 5, 7], val = 4
+
+    Output: [1, 3, 4, 5, 7]
+
+    Clarifying Questions For Interviewer:
+    1. Is the linked list sorted in ascending order?
+    2. Can the linked list be empty?
+    3. Are duplicate values allowed?
+    4. Should the new node be inserted before or after equal values?
+    5. Should the function return the updated head?
+
+    -----
+
+    BRUTE-FORCE
+
+    Idea: Brief intuition of brute-force approach.
+
+    Store all values in an array, add the new value, sort the array, and rebuild the linked list.
+
+    Steps:
+    1. Traverse the linked list and store all values in an array.
+    2. Add the new value and sort the array.
+    3. Create a new linked list from the sorted array.
+
+    Python Code:
+
+    class Solution:
+        def sortedInsert(self, head, val):
+
+            values = []
+            current = head
+
+            while current:
+                values.append(current.val)
+                current = current.next
+
+            values.append(val)
+            values.sort()
+
+            dummy = ListNode(0)
+            tail = dummy
+
+            for num in values:
+                tail.next = ListNode(num)
+                tail = tail.next
+
+            return dummy.next
+
+    Time Complexity: O(n log n)
+    Space Complexity: O(n)
+
+    Why It Won't Work Efficiently?
+    Because:
+    - Stores all values in an extra array.
+    - Sorts data that is already sorted.
+    - Rebuilds the entire linked list unnecessarily.
+
+    -----
+
+    OPTIMAL
+
+    Idea:
+
+    Traverse the sorted linked list to find the correct insertion position and insert the new node there.
+
+    Steps:
+    1. Create a new node with the given value.
+    2. Find the position where the value should be inserted.
+    3. Update pointers to insert the node and return the head.
+
+    Python Code:
+
+    class Solution:
+        def sortedInsert(self, head, val):
+
+            new_node = ListNode(val)
+
+            if not head or val <= head.val:
+                new_node.next = head
+                return new_node
+
+            current = head
+
+            while current.next and current.next.val < val:
+                current = current.next
+
+            new_node.next = current.next
+            current.next = new_node
+
+            return head
+
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+
+    Why It Works?
+    Because:
+    - Traverses the list only once.
+    - Inserts the node directly at the correct position.
+    - Preserves the sorted order of the linked list.
+
+7. Insert at Middle of Linked List (Fast & Slow Pointers)
+
+    Explanation: Clear beginner-friendly explanation of the problem.
+
+    You are given the head of a singly linked list and a value. Insert a new node with the given value at the middle of the linked list. For an even-length list, insert after the first middle node. Return the head of the updated linked list.
+
+    Input: head = [1, 2, 3, 4], x = 99
+
+    Output: [1, 2, 99, 3, 4]
+
+    Clarifying Questions For Interviewer:
+    1. For even length lists, should we insert before or after the middle?
+    2. Can the linked list be empty?
+    3. Should we return the updated head?
+    4. Are node values always integers?
+    5. Is modifying the original list allowed?
+
+    -----
+
+    BRUTE-FORCE
+
+    Idea: Brief intuition of brute-force approach.
+
+    Store all values in an array, insert the value in the middle index, and rebuild the linked list.
+
+    Steps:
+    1. Traverse the linked list and store values in an array.
+    2. Find the middle index.
+    3. Insert the new value at the middle index.
+    4. Rebuild the linked list from the updated array.
+
+    Python Code:
+
+    class Solution:
+        def insertInMiddle(self, head, x):
+
+            values = []
+            current = head
+
+            while current:
+                values.append(current.data)
+                current = current.next
+
+            mid = len(values) // 2
+            values.insert(mid, x)
+
+            dummy = Node(0)
+            tail = dummy
+
+            for num in values:
+                tail.next = Node(num)
+                tail = tail.next
+
+            return dummy.next
+
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+
+    Why It Won't Work Efficiently?
+    Because:
+    - Uses extra array to store all nodes.
+    - Rebuilds the entire linked list.
+    - Performs unnecessary reconstruction.
+
+    -----
+
+    OPTIMAL
+
+    Idea:
+
+    Use slow and fast pointers to find the middle node. Insert the new node right after the slow pointer.
+
+    Steps:
+    1. Create a new node with the given value.
+    2. Use slow and fast pointers to locate the middle.
+    3. Insert the new node after the slow pointer.
+    4. Return the head.
+
+    Python Code:
+
+    class Solution:
+        def insertInMiddle(self, head, x):
+
+            new_node = Node(x)
+
+            if not head:
+                return new_node
+
+            slow = head
+            fast = head.next
+
+            while fast and fast.next:
+                slow = slow.next
+                fast = fast.next.next
+
+            new_node.next = slow.next
+            slow.next = new_node
+
+            return head
+
+    Time Complexity: O(n)
+    Space Complexity: O(1)
+
+    Why It Works?
+    Because:
+    - Finds the middle using two pointers.
+    - Inserts the node without rebuilding the list.
+    - Uses constant extra memory.   
+
